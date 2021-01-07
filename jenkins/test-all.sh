@@ -1,0 +1,1 @@
+echo "test-all script is executed"
