@@ -11,7 +11,7 @@ pipeline {
     stage('Fluffy Test') {
       steps {
         sh './jenkins/test-all.sh'
-        junit 'target/**/TEST*.xml'
+        junit(testResults: 'target/**/TEST*.xml', allowEmptyResults: true)
       }
     }
 
