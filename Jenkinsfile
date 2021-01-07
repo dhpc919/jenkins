@@ -9,9 +9,31 @@ pipeline {
     }
 
     stage('Fluffy Test') {
-      steps {
-        sh './jenkins/test-all.sh'
-        junit(testResults: 'target/**/TEST*.xml', allowEmptyResults: true)
+      parallel {
+        stage('Static') {
+          steps {
+            sh './jenkins/test-static.sh'
+          }
+        }
+
+        stage('Backend') {
+          steps {
+            sh './jenkins/test-backend.sh'
+          }
+        }
+
+        stage('Frontend') {
+          steps {
+            sh './jenkins/test-frontend.sh'
+          }
+        }
+
+        stage('Performance') {
+          steps {
+            sh './jenkins/test-performance.sh'
+          }
+        }
+
       }
     }
 
