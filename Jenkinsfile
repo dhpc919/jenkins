@@ -10,7 +10,7 @@ pipeline {
       }
       steps {
         sh 'echo Another Placeholder'
-        stash(name: 'Java 8', includes: 'target/**')
+        stash(name: 'Java 8', includes: 'target/*')
       }
     }
 
