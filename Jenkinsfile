@@ -1,47 +1,123 @@
 pipeline {
-  agent any
+  agent none
   stages {
     stage('Fluffy Build') {
-      steps {
-        sh './jenkins/build.sh'
-        archiveArtifacts(fingerprint: true, artifacts: 'target/*.jar')
+      parallel {
+        stage('Build Java 7') {
+          agent {
+            node {
+              label 'java7'
+            }
+
+          }
+          steps {
+            stash(name: 'java 7', includes: 'target/java 7/*')
+            archiveArtifacts(artifacts: 'target/java 7/text.txt', fingerprint: true)
+          }
+        }
+
+        stage('Build Java 8') {
+          agent {
+            node {
+              label 'java8'
+            }
+
+          }
+          steps {
+            stash(name: 'java 8', includes: 'target/java 8/*')
+          }
+        }
+
       }
     }
 
     stage('Fluffy Test') {
       parallel {
-        stage('Static') {
+        stage('Fluffy Test') {
+          agent {
+            node {
+              label 'java8'
+            }
+
+          }
           steps {
-            sh './jenkins/test-static.sh'
+            sh 'sleep 5'
+            sh 'echo Success!'
           }
         }
 
-        stage('Backend') {
+        stage('Java 7 Test 1') {
+          agent {
+            node {
+              label 'java7'
+            }
+
+          }
           steps {
-            sh './jenkins/test-backend.sh'
+            unstash 'java 7'
           }
         }
 
-        stage('Frontend') {
+        stage('Java 7 Test 2') {
+          agent {
+            node {
+              label 'java7'
+            }
+
+          }
           steps {
-            sh './jenkins/test-frontend.sh'
+            unstash 'java 7'
           }
         }
 
-        stage('Performance') {
+        stage('Java 8 Test 1') {
+          agent {
+            node {
+              label 'java8'
+            }
+
+          }
           steps {
-            sh './jenkins/test-performance.sh'
+            unstash 'java 8'
           }
         }
 
+        stage('Java 8 Test 2') {
+          agent {
+            node {
+              label 'java8'
+            }
+
+          }
+          steps {
+            unstash 'java 8'
+          }
+        }
+
+      }
+    }
+
+    stage('Confirm Deploy') {
+      steps {
+        input(message: 'You are prompted to confirm the deployment', ok: 'Confirm', submitter: 'derrick')
       }
     }
 
     stage('Fluffy Deploy') {
+      agent {
+        node {
+          label 'java7'
+        }
+
+      }
       steps {
+        echo 'Placeholder'
+        unstash 'java 7'
         sh './jenkins/deploy.sh staging'
       }
     }
+
+
 
   }
 }
