@@ -4,7 +4,7 @@ pipeline {
     stage('Fluffy Build') {
       agent {
         node {
-          label 'java 8'
+          label 'java8'
         }
 
       }
@@ -17,7 +17,7 @@ pipeline {
     stage('Fluffy Test') {
       agent {
         node {
-          label 'java 8'
+          label 'java8'
         }
 
       }
@@ -31,7 +31,7 @@ pipeline {
     stage('Fluffy Deploy') {
       agent {
         node {
-          label 'java 8'
+          label 'java8'
         }
 
       }
