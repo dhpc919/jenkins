@@ -4,6 +4,7 @@ pipeline {
     stage ("start") {
 
       steps {
+        echo ""
         // withCredentials (bindings: [string(credentialsId: 'stupid-id', variable: 'ID')]) {
         //   echo $ID
         // }
