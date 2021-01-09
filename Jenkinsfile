@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  options { skipDefaultCheckout() }
   stages {
     stage('start') {
       steps {
