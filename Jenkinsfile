@@ -4,11 +4,11 @@ pipeline {
     stage('start') {
       steps {
         withCredentials(bindings: [
-                      usernamePassword(
-                            credentialsId: 'stupid-id',
-                            usernameVariable: 'USER',
-                            passwordVariable: 'PASS'
-                            )]) {
+                                          usernamePassword(
+                                                    credentialsId: 'stupid-id',
+                                                    usernameVariable: 'USER',
+                                                    passwordVariable: 'PASS'
+                                                    )]) {
               sh '''
                 echo "The username is: ${USER}"
                 echo "The password is : ${PASS}"
@@ -151,6 +151,9 @@ pipeline {
         }
 
         stage('Confirm Deploy') {
+          when {
+            branch 'main'
+          }
           steps {
             input(message: 'You are prompted to confirm the deployment', ok: 'Confirm', submitter: 'derrick')
           }
@@ -162,6 +165,9 @@ pipeline {
               label 'java7'
             }
 
+          }
+          when {
+            branch 'main'
           }
           steps {
             echo 'Placeholder'
