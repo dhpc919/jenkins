@@ -4,10 +4,17 @@ pipeline {
     stage ("start") {
 
       steps {
-        echo ""
-        // withCredentials (bindings: [string(credentialsId: 'stupid-id', variable: 'ID')]) {
-        //   echo $ID
-        // }
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'stupid-id', 
+                usernameVariable: 'USER', 
+                passwordVariable: 'PASS'
+                )]) {
+            sh '''
+                echo "The username is: ${USER}"
+                echo "The password is : ${PASS}"
+            '''
+        }
       }
     }
     stage('Fluffy Build') {
