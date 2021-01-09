@@ -1,23 +1,22 @@
 pipeline {
   agent any
-  options { skipDefaultCheckout() }
+  options {
+    skipDefaultCheckout()
+  }
+  parameters {
+    string(name: 'DEPLOY_TO', defaultValue: 'dev', description: '')
+  }
   stages {
     stage('start') {
       steps {
-        withCredentials(bindings: [
-                                          usernamePassword(
-                                                    credentialsId: 'stupid-id',
-                                                    usernameVariable: 'USER',
-                                                    passwordVariable: 'PASS'
-                                                    )]) {
+        withCredentials(bindings: [usernamePassword(credentialsId: 'stupid-id', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
               sh '''
                 echo "The username is: ${USER}"
                 echo "The password is : ${PASS}"
-            '''
-            }
-
-          }
+                '''
         }
+      }
+    }
 
         stage('Fluffy Build') {
           parallel {
@@ -26,14 +25,12 @@ pipeline {
                 node {
                   label 'java7'
                 }
-
               }
               post {
                 success {
                   stash(name: 'java 7', includes: 'target/java 7/*')
                   archiveArtifacts(artifacts: 'target/java 7/text.txt', fingerprint: true)
                 }
-
               }
               steps {
                 echo 'sth'
@@ -45,19 +42,16 @@ pipeline {
                 node {
                   label 'java8'
                 }
-
               }
               post {
                 success {
                   stash(name: 'java 8', includes: 'target/java 8/*')
                 }
-
               }
               steps {
                 echo 'sth'
               }
             }
-
           }
         }
 
@@ -68,7 +62,6 @@ pipeline {
                 node {
                   label 'java8'
                 }
-
               }
               steps {
                 sh 'sleep 1'
@@ -81,13 +74,11 @@ pipeline {
                 node {
                   label 'java7'
                 }
-
               }
               post {
                 success {
                   unstash 'java 7'
                 }
-
               }
               steps {
                 echo 'sth'
@@ -99,13 +90,11 @@ pipeline {
                 node {
                   label 'java7'
                 }
-
               }
               post {
                 success {
                   unstash 'java 7'
                 }
-
               }
               steps {
                 echo 'sth'
@@ -117,13 +106,11 @@ pipeline {
                 node {
                   label 'java8'
                 }
-
               }
               post {
                 success {
                   unstash 'java 8'
                 }
-
               }
               steps {
                 echo 'sth'
@@ -135,19 +122,16 @@ pipeline {
                 node {
                   label 'java8'
                 }
-
               }
               post {
                 success {
                   unstash 'java 8'
                 }
-
               }
               steps {
                 echo 'sth'
               }
             }
-
           }
         }
 
@@ -165,7 +149,6 @@ pipeline {
             node {
               label 'java7'
             }
-
           }
           when {
             branch 'main'
@@ -173,9 +156,8 @@ pipeline {
           steps {
             echo 'Placeholder'
             unstash 'java 7'
-            sh './jenkins/deploy.sh staging'
+            sh "./jenkins/deploy.sh ${params.DEPLOY_TO}"
           }
         }
-
-      }
-    }
+  }
+}
