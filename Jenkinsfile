@@ -4,9 +4,9 @@ pipeline {
     stage ("start") {
 
       steps {
-        withCredentials (bindings: [string(credentialsId: 'stupid-id', variable: 'ID')]) {
-          echo $ID
-        }
+        // withCredentials (bindings: [string(credentialsId: 'stupid-id', variable: 'ID')]) {
+        //   echo $ID
+        // }
       }
     }
     stage('Fluffy Build') {
