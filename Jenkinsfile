@@ -123,5 +123,11 @@ pipeline {
       }
     }
 
+    stage('Confirm Deploy') {
+      steps {
+        input(message: 'You are prompted to confirm the deployment', ok: 'Confirm', submitter: 'derrick')
+      }
+    }
+
   }
 }
