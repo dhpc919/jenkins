@@ -113,6 +113,7 @@ pipeline {
       steps {
         echo 'Placeholder'
         unstash 'java 7'
+        sh './jenkins/deploy.sh staging'
       }
     }
 
