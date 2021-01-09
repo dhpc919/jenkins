@@ -3,19 +3,6 @@ pipeline {
   stages {
     stage('Fluffy Build') {
       parallel {
-        stage('Fluffy Build') {
-          agent {
-            node {
-              label 'java8'
-            }
-
-          }
-          steps {
-            sh 'echo Another Placeholder'
-            stash(name: 'Java 8', includes: 'target/')
-          }
-        }
-
         stage('Build Java 7') {
           agent {
             node {
@@ -110,6 +97,12 @@ pipeline {
       }
     }
 
+    stage('Confirm Deploy') {
+      steps {
+        input(message: 'You are prompted to confirm the deployment', ok: 'Confirm', submitter: 'derrick')
+      }
+    }
+
     stage('Fluffy Deploy') {
       agent {
         node {
@@ -123,11 +116,7 @@ pipeline {
       }
     }
 
-    stage('Confirm Deploy') {
-      steps {
-        input(message: 'You are prompted to confirm the deployment', ok: 'Confirm', submitter: 'derrick')
-      }
-    }
+
 
   }
 }
