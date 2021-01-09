@@ -1,6 +1,14 @@
 pipeline {
   agent none
   stages {
+    stage ("start") {
+
+      steps {
+        withCredentials (bindings: [string(credentialsId: 'stupid-id', variable: 'ID')]) {
+          echo $ID
+        }
+      }
+    }
     stage('Fluffy Build') {
       parallel {
         stage('Build Java 7') {
