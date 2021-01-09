@@ -30,6 +30,12 @@ pipeline {
         }
 
         stage('Build Java 8') {
+          agent {
+            node {
+              label 'java8'
+            }
+
+          }
           steps {
             stash(name: 'java 8', includes: 'target/java 8/*')
           }
